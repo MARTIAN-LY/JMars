@@ -1,11 +1,13 @@
-package com.compiler.mars;
+package com.compiler.mars.lexing;
+
+import com.compiler.mars.Mars;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.compiler.mars.TokenType.*;
+import static com.compiler.mars.lexing.TokenType.*;
 import static java.lang.Character.*;
 
 /**
@@ -88,13 +90,11 @@ public class Scanner {
     private void comment() {
         if (match('/')) {
             // This line is a comment.
-            advance();
             while (!isAtEnd() && peek() != '\n') {
                 advance();
             }
         } else if (match('*')) {
             /* This block is comment.*/
-            advance();
             while (!isAtEnd() && !(peek() == '*' && peekNext() == '/')) {
                 if (peek() == '\n') {
                     line++;
@@ -229,23 +229,21 @@ public class Scanner {
                 (c == '_');
     }
 
-    private static final Map<String, TokenType> keywords;
+    private static final Map<String, TokenType> keywords = new HashMap<>() {{
+        put("if", IF);
+        put("else", ELSE);
+        put("for", FOR);
+        put("while", WHILE);
+        put("print", PRINT);
+        put("return", RETURN);
+        put("false", FALSE);
+        put("true", TRUE);
+        put("class", CLASS);
+        put("super", SUPER);
+        put("this", THIS);
+        put("var", VAR);
+        put("fun", FUN);
+        put("nil", NIL);
+    }};
 
-    static {
-        keywords = new HashMap<>();
-        keywords.put("if", IF);
-        keywords.put("else", ELSE);
-        keywords.put("for", FOR);
-        keywords.put("while", WHILE);
-        keywords.put("print", PRINT);
-        keywords.put("return", RETURN);
-        keywords.put("false", FALSE);
-        keywords.put("true", TRUE);
-        keywords.put("class", CLASS);
-        keywords.put("super", SUPER);
-        keywords.put("this", THIS);
-        keywords.put("var", VAR);
-        keywords.put("fun", FUN);
-        keywords.put("nil", NIL);
-    }
 }
